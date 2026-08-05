@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACA 群聊推广</title>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS Variables ===== */
+:root {
+  --sakura: #F2A7B3;
+  --sakura-light: #FDE8EC;
+  --sky: #7EC8E3;
+  --sky-light: #E4F4FA;
+  --cream: #FFFAF5;
+  --white: #FFFFFF;
+  --text: #4A3F3C;
+  --text-light: #8B7D79;
+  --card-shadow: 0 4px 20px rgba(180, 150, 140, 0.12);
+  --card-shadow-hover: 0 12px 36px rgba(180, 150, 140, 0.22);
+  --qq-color: #5BA0F5;
+  --wechat-color: #57C682;
+  --radius: 18px;
+  --radius-sm: 10px;
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background-color: var(--cream);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== Floating Sakura Petals ===== */
+.petals-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.petal {
+  position: absolute;
+  top: -40px;
+  opacity: 0;
+  animation: petalFall linear infinite;
+}
+
+.petal::before {
+  content: '🌸';
+  font-size: var(--size, 16px);
+  display: block;
+}
+
+@keyframes petalFall {
+  0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
+  5%   { opacity: 0.7; }
+  80%  { opacity: 0.5; }
+  100% { transform: translateY(105vh) rotate(var(--rot, 360deg)) translateX(var(--drift, 80px)); opacity: 0; }
+}
+
+/* ===== Header ===== */
+.header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 64px 24px 52px;
+  background: linear-gradient(175deg, var(--sky-light) 0%, var(--sakura-light) 50%, var(--cream) 100%);
+  overflow: hidden;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 100%; height: 60px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,30 C150,50 300,5 450,35 C600,60 750,10 900,30 C1050,50 1150,20 1200,30 L1200,60 L0,60 Z' fill='%23FFFAF5'/%3E%3C/svg%3E") no-repeat bottom center;
+  background-size: 100% 100%;
+}
+
+.header-decoration {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.header-star { font-size: 22px; animation: twinkle 2s ease-in-out infinite; }
+.header-star:nth-child(2) { animation-delay: 0.4s; font-size: 18px; }
+.header-star:nth-child(3) { animation-delay: 0.8s; font-size: 26px; }
+.header-star:nth-child(4) { animation-delay: 1.2s; font-size: 18px; }
+.header-star:nth-child(5) { animation-delay: 1.6s; font-size: 22px; }
+
+@keyframes twinkle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.25) rotate(10deg); }
+}
+
+.header h1 {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: clamp(36px, 6vw, 54px);
+  color: var(--text);
+  letter-spacing: 4px;
+}
+
+.header .subtitle {
+  margin-top: 10px;
+  font-size: 16px;
+  color: var(--text-light);
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+/* Decorative line below subtitle */
+.header-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.header-line span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--sakura);
+}
+
+.header-line span:nth-child(even) { background: var(--sky); width: 14px; }
+
+/* ===== Filter Bar ===== */
+.filter-bar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px 16px 8px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 24px;
+  border: 2px solid #E8DDD8;
+  border-radius: 30px;
+  background: var(--white);
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.filter-btn:hover {
+  border-color: var(--sakura);
+  color: var(--sakura);
+  transform: translateY(-2px);
+}
+
+.filter-btn.active {
+  background: var(--sakura);
+  border-color: var(--sakura);
+  color: var(--white);
+  box-shadow: 0 4px 14px rgba(242, 167, 179, 0.35);
+}
+
+/* ===== Card Grid ===== */
+.card-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+/* ===== Card ===== */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 28px 24px 24px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1.5px solid transparent;
+  animation: cardReveal 0.6s ease forwards;
+  opacity: 0;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--sakura-light);
+}
+
+/* Staggered reveal delays */
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.10s; }
+.card:nth-child(3) { animation-delay: 0.15s; }
+.card:nth-child(4) { animation-delay: 0.20s; }
+.card:nth-child(5) { animation-delay: 0.25s; }
+.card:nth-child(6) { animation-delay: 0.30s; }
+.card:nth-child(7) { animation-delay: 0.35s; }
+.card:nth-child(8) { animation-delay: 0.40s; }
+
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Card Header ===== */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.card-type-badge {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+}
+
+.card-type-badge.qq {
+  background: #EBF3FE;
+  color: var(--qq-color);
+}
+
+.card-type-badge.wechat {
+  background: #E8F8EF;
+  color: var(--wechat-color);
+}
+
+/* ===== Card Category Tags ===== */
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.card-tag {
+  font-size: 12px;
+  padding: 4px 10px;
+  background: var(--sky-light);
+  color: #5A9BB5;
+  border-radius: var(--radius-sm);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Card Body ===== */
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.card-desc {
+  font-size: 14px;
+  color: var(--text-light);
+  line-height: 1.8;
+  flex-grow: 1;
+}
+
+/* ===== Card Footer ===== */
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px dashed #EDE4DF;
+  font-size: 13px;
+}
+
+.card-admin {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-light);
+}
+
+.card-admin-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--sakura-light);
+  font-size: 13px;
+}
+
+.card-admin-name {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.card-join {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #C0B5B0;
+  font-size: 12px;
+}
+
+/* ===== Footer ===== */
+.page-footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 36px 24px 32px;
+  font-size: 13px;
+  color: var(--text-light);
+  letter-spacing: 1px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 680px) {
+  .card-grid { grid-template-columns: 1fr; padding: 20px 16px 48px; }
+  .header { padding: 44px 16px 40px; }
+  .header h1 { font-size: 30px; }
+  .card { padding: 22px 18px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Floating Sakura Petals -->
+<div class="petals-container" id="petals"></div>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-decoration">
+    <span class="header-star">⭐</span>
+    <span class="header-star">🌸</span>
+    <span class="header-star">✨</span>
+    <span class="header-star">🌸</span>
+    <span class="header-star">⭐</span>
+  </div>
+  <h1>群 聊 推 广</h1>
+  <p class="subtitle">发现你的同好圈子，一起畅聊 ACG 世界</p>
+  <div class="header-line">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+</header>
+
+<!-- Filter Bar -->
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">全 部</button>
+  <button class="filter-btn" data-filter="QQ群">🐧 QQ 群</button>
+  <button class="filter-btn" data-filter="微信群">💬 微 信 群</button>
+</div>
+
+<!-- Card Grid -->
+<section class="card-grid" id="cardGrid">
+  <!-- Card 1 -->
+  <div class="card" data-type="QQ群" data-category="百合,文化研究,动漫">
+    <div class="card-header">
+      <div class="card-tags">
+        <span class="card-tag">动漫/番剧</span>
+        <span class="card-tag">轻小说/漫画</span>
+        <span class="card-tag">百合向</span>
+        <span class="card-tag">综合闲聊</span>
+      </div>
+      <span class="card-type-badge qq">QQ群</span>
+    </div>
+    <div class="card-title">百合 · 亚文化研究交流</div>
+    <div class="card-desc">欢迎对百合和亚文化研究感兴趣的朋友加入我群！聊天内容和形式非常自由，群友都很友善的www</div>
+    <div class="card-footer">
+      <div class="card-admin"><span class="card-admin-icon">🐱</span><span class="card-admin-name">Rei</span></div>
+      <div class="card-join">加群方式 · 待补充</div>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="card" data-type="微信群" data-category="二次元,闲聊,交友">
+    <div class="card-header">
+      <div class="card-tags">
+        <span class="card-tag">动漫/番剧</span>
+        <span class="card-tag">轻小说/漫画</span>
+        <span class="card-tag">综合闲聊</span>
+      </div>
+      <span class="card-type-badge wechat">微信群</span>
+    </div>
+    <div class="card-title">二次元日常 · 聊天交友</div>
+    <div class="card-desc">家一样的港湾，可以无话不谈，生活分享约聚面基，二次元资讯闲聊</div>
+    <div class="card-footer">
+      <div class="card-admin"><span class="card-admin-icon">🍵</span><span class="card-admin-name">大吉岭的红茶</span></div>
+      <div class="card-join">加群方式 · 待补充</div>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="card" data-type="微信群" data-category="COS,摄影,同人,绘画">
+    <div class="card-header">
+      <div class="card-tags">
+        <span class="card-tag">COS/摄影</span>
+        <span class="card-tag">同人创作</span>
+        <span class="card-tag">板绘</span>
+      </div>
+      <span class="card-type-badge wechat">微信群</span>
+    </div>
+    <div class="card-title">二次元板绘 · 同人创作</div>
+    <div class="card-desc">二次元板绘群，欢迎所有画手入群——画技不限，风格不限，一起来画画吧！</div>
+    <div class="card-footer">
+      <div class="card-admin"><span class="card-admin-icon">🎨</span><span class="card-admin-name">kotomi</span></div>
+      <div class="card-join">加群方式 · 待补充</div>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="card" data-type="QQ群" data-category="音游,街机,移动端">
+    <div class="card-header">
+      <div class="card-tags">
+        <span class="card-tag">音乐游戏</span>
+        <span class="card-tag">街机音游</span>
+        <span class="card-tag">移动端音游</span>
+      </div>
+      <span class="card-type-badge qq">QQ群</span>
+    </div>
+    <div class="card-title">HKU 音游同好会</div>
+    <div class="card-desc">以各种日系街机音游为主，移动端音游为辅，各路大神在此。欢迎各位进群一起出勤打音游，祝各位早日皆传🎵</div>
+    <div class="card-footer">
+      <div class="card-admin"><span class="card-admin-icon">🎮</span><span class="card-admin-name">小孙</span></div>
+      <div class="card-join">加群方式 · 待补充</div>
+    </div>
+  </div>
+
+  <!-- Card 5 -->
+  <div class="card" data-type="微信群" data-category="跑团,TRPG,COC">
+    <div class="card-header">
+      <div class="card-tags">
+        <span class="card-tag">跑团/TRPG</span>
+        <span class="card-tag">COC</span>
+        <span class="card-tag">DND</span>
+        <span class="card-tag">黑暗世界</span>
+      </div>
+      <span class="card-type-badge wechat">微信群</span>
+    </div>
+    <div class="card-title">TRPG 跑团大冒险</div>
+    <div class="card-desc">如果你看到跑团 Replay 却不知如何入坑，或想社交的同时享受游戏乐趣——这里有多位资深 KP，带过无数萌新入坑。暑假网团绝赞进行中！（主营COC，也有DND及其他规则哟～）</div>
+    <div class="card-footer">
+      <div class="card-admin"><span class="card-admin-icon">🎲</span><span class="card-admin-name">王浩711</span></div>
+      <div class="card-join">加群方式 · 待补充</div>
+    </div>
+  </div>
+
+  <!-- Card 6 -->
+  <div class="card" data-type="微信群" data-category="LoveLive,BangDream,学园偶像,乐队">
+    <div class="card-header">
+      <div class="card-tags">
+        <span class="card-tag">动漫/番剧</span>
+        <span class="card-tag">LoveLive!</span>
+        <span class="card-tag">BanG Dream!</span>
+      </div>
+      <span class="card-type-badge wechat">微信群</span>
+    </div>
+    <div class="card-title">拉邦结派部 ～学园偶像×女子乐队～</div>
+    <div class="card-desc">你看邦邦吗？你看拉拉吗？想不想成为学园偶像？想不想看女人组乐队？请来我们拉邦结派部！一起跟随 7 月新番的脚步讨论梦限大吧！</div>
+    <div class="card-footer">
+      <div class="card-admin"><span class="card-admin-icon">🎸</span><span class="card-admin-name">Aoi_</span></div>
+      <div class="card-join">加群方式 · 待补充</div>
+    </div>
+  </div>
+
+  <!-- Card 7 -->
+  <div class="card" data-type="QQ群" data-category="绘画,接龙,二次元">
+    <div class="card-header">
+      <div class="card-tags">
+        <span class="card-tag">板绘</span>
+        <span class="card-tag">绘画接龙</span>
+        <span class="card-tag">茶绘</span>
+        <span class="card-tag">综合闲聊</span>
+      </div>
+      <span class="card-type-badge qq">QQ群</span>
+    </div>
+    <div class="card-title">绘画接龙 · 同人创作工坊</div>
+    <div class="card-desc">进群可以参加绘画接龙！上色接龙！模版合绘！不定时茶绘！可以闲聊、交友、扩列、分享 OC 日常～不卡技术、不卡年龄、不画画也能来～</div>
+    <div class="card-footer">
+      <div class="card-admin"><span class="card-admin-icon">🔨</span><span class="card-admin-name">🔨</span></div>
+      <div class="card-join">加群方式 · 待补充</div>
+    </div>
+  </div>
+
+  <!-- Card 8 -->
+  <div class="card" data-type="微信群" data-category="原神,米游,二游">
+    <div class="card-header">
+      <div class="card-tags">
+        <span class="card-tag">二游交流</span>
+        <span class="card-tag">原神</span>
+        <span class="card-tag">COS/同人</span>
+        <span class="card-tag">综合闲聊</span>
+      </div>
+      <span class="card-type-badge wechat">微信群</span>
+    </div>
+    <div class="card-title">原神 · 米游玩家聚集地</div>
+    <div class="card-desc">米游原神玩家都可以来！氛围很好福利多多，有代肝、同人游戏作品、同人文、cos 交流等等，暑假群里非常热闹！</div>
+    <div class="card-footer">
+      <div class="card-admin"><span class="card-admin-icon">📖</span><span class="card-admin-name">手不释卷真君</span></div>
+      <div class="card-join">加群方式 · 待补充</div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="page-footer">
+  <p>🌸 ACA · 动漫文化协会 🌸</p>
+</footer>
+
+<script>
+// ===== Floating Sakura Petals =====
+(function() {
+  const container = document.getElementById('petals');
+  const petalChars = ['🌸', '💮', '✿', '🌷'];
+  for (let i = 0; i < 18; i++) {
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    petal.style.left = Math.random() * 100 + '%';
+    petal.style.setProperty('--size', (12 + Math.random() * 18) + 'px');
+    petal.style.setProperty('--rot', (180 + Math.random() * 360) + 'deg');
+    petal.style.setProperty('--drift', (-60 + Math.random() * 120) + 'px');
+    petal.style.animationDuration = (8 + Math.random() * 14) + 's';
+    petal.style.animationDelay = Math.random() * 10 + 's';
+    petal.textContent = petalChars[Math.floor(Math.random() * petalChars.length)];
+    container.appendChild(petal);
+  }
+})();
+
+// ===== Filter Buttons =====
+(function() {
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.card');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter;
+
+      cards.forEach((card, i) => {
+        if (filter === 'all' || card.dataset.type === filter) {
+          card.style.display = '';
+          // Retrigger animation
+          card.style.animation = 'none';
+          card.offsetHeight;
+          card.style.animation = `cardReveal 0.5s ease forwards`;
+          card.style.animationDelay = (i * 0.04) + 's';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
