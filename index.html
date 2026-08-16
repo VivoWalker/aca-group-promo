@@ -560,6 +560,15 @@ body {
   letter-spacing: 1px;
 }
 
+.footer-disclaimer {
+  max-width: 720px;
+  margin: 12px auto 0;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #B3A7A3;
+  letter-spacing: 0.5px;
+}
+
 /* ===== Promo Bubble ===== */
 .promo-bubble-wrap {
   position: fixed;
@@ -791,8 +800,9 @@ body {
 
   <!-- Card 3: 小孙 — QQ群 · 音游 -->
   <div class="card" data-type="QQ群" data-category="音游,街机,移动端">
-    <div class="card-banner no-banner">
-      <img src="" alt="" onerror="this.parentElement.classList.add('no-banner')">
+    <div class="card-banner">
+      <img src="宣群资料/头图小孙.png" alt="音游群头图" loading="lazy"
+           onerror="this.style.display='none';this.parentElement.classList.add('no-banner')">
     </div>
     <div class="card-body">
       <div class="card-header">
@@ -808,7 +818,7 @@ body {
     </div>
     <div class="card-footer">
       <div class="card-admin"><span class="card-admin-icon">🎮</span><span class="card-admin-name">小孙</span></div>
-      <button class="card-qr-btn no-qr">📱 加群方式待补充</button>
+      <button class="card-qr-btn" data-qr="宣群资料/QR小孙.jpg" data-title="HKU BMUG" data-admin="小孙">📱 扫码加入</button>
     </div>
   </div>
 
@@ -990,6 +1000,7 @@ body {
 <!-- Footer -->
 <footer class="page-footer">
   <p>🌸 香港大学动漫联盟 · ACAHKU 🌸</p>
+  <p class="footer-disclaimer">免责声明：本页面所列群聊由各群主自发提供并独立运营，与本社团无关。加入群聊后如产生任何损失（包括但不限于财产、信息或人身安全方面），本社团及本站均不承担任何责任。</p>
 </footer>
 
 <script>
