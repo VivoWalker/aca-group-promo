@@ -1198,17 +1198,17 @@ body {
 </div>
 
 <!-- Promo Bubble -->
-<div class="promo-bubble-wrap">
+<div class="promo-bubble-wrap" id="promoBubbleWrap" style="display:none;">
   <span class="promo-bubble-label">欢迎加入我们ACAHKU的微信群</span>
-  <button class="promo-bubble" id="promoBubble" title="加入ACA群聊社区">💬</button>
+  <button class="promo-bubble" id="promoBubble" type="button" title="加入ACA群聊社区" aria-haspopup="dialog" aria-controls="promoOverlay">💬</button>
 </div>
 
 <!-- Promo Poster Modal -->
-<div class="promo-overlay" id="promoOverlay" style="display:none;">
+<div class="promo-overlay" id="promoOverlay" role="dialog" aria-modal="true" aria-labelledby="promoModalTitle">
   <div class="promo-modal">
-    <button class="promo-modal-close" id="promoClose">✕</button>
-    <img src="素材/Wechat promotion poster.jpg" alt="WeChat Group Promo Poster" loading="lazy">
-    <div class="promo-modal-title">✨ 加入 ACA 群聊社区 ✨</div>
+    <button class="promo-modal-close" id="promoClose" type="button" aria-label="关闭 ACA 群聊二维码">✕</button>
+    <img src="素材/Wechat promotion poster.jpg" alt="ACAHKU 微信群二维码" loading="eager">
+    <div class="promo-modal-title" id="promoModalTitle">✨ 加入 ACA 群聊社区 ✨</div>
     <div class="promo-modal-text">扫一扫上方二维码，或浏览下方群聊卡片找到你感兴趣的圈子。ACG 同好都在这里等你来玩～</div>
   </div>
 </div>
@@ -1222,6 +1222,10 @@ body {
     <button class="update-log-close" id="updateLogClose" type="button" aria-label="关闭更新日志">✕</button>
     <h2 class="update-log-title" id="updateLogTitle">🌸 更新日志 🌸</h2>
     <ol class="update-list">
+      <li class="update-item">
+        <time class="update-time" datetime="2026-09-07T15:52:00+08:00">2026-09-07 15:52</time>
+        <span class="update-text">ACA 群聊二维码改为打开网页时自动弹出，关闭后显示于页面右下角。</span>
+      </li>
       <li class="update-item">
         <time class="update-time" datetime="2026-09-07T15:42:00+08:00">2026-09-07 15:42</time>
         <span class="update-text">将更新日志改为按钮触发的弹出窗口。</span>
@@ -1288,19 +1292,27 @@ body {
 // ===== Promo Bubble & Poster =====
 (function() {
   const bubble = document.getElementById('promoBubble');
+  const bubbleWrap = document.getElementById('promoBubbleWrap');
   const overlay = document.getElementById('promoOverlay');
   const closeBtn = document.getElementById('promoClose');
 
-  bubble.addEventListener('click', () => {
+  function openPromo() {
     overlay.style.display = 'flex';
+    bubbleWrap.style.display = 'none';
     document.body.style.overflow = 'hidden';
-  });
+    closeBtn.focus();
+  }
 
   function closePromo() {
     overlay.style.display = 'none';
+    bubbleWrap.style.display = 'flex';
     document.body.style.overflow = '';
+    bubble.focus();
   }
 
+  // Show the QR poster as soon as the page opens.
+  openPromo();
+  bubble.addEventListener('click', openPromo);
   closeBtn.addEventListener('click', closePromo);
   overlay.addEventListener('click', function(e) {
     if (e.target === overlay) closePromo();
