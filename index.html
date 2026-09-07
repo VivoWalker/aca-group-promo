@@ -551,6 +551,61 @@ body {
   color: #fff;
 }
 
+/* ===== Update Log ===== */
+.update-log {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 8px auto 0;
+  padding: 0 24px;
+}
+
+.update-log-panel {
+  padding: 26px 30px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(242, 167, 179, 0.28);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 28px rgba(180, 150, 140, 0.12);
+}
+
+.update-log-title {
+  margin: 0 0 18px;
+  font-size: 20px;
+  color: var(--text);
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.update-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.update-item {
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 18px;
+  padding: 11px 0;
+  border-bottom: 1px dashed rgba(139, 199, 223, 0.35);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.update-item:last-child {
+  border-bottom: none;
+}
+
+.update-time {
+  color: #70AFC8;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.update-text {
+  color: var(--text-light);
+}
+
 /* ===== Footer ===== */
 .page-footer {
   position: relative;
@@ -710,6 +765,9 @@ body {
   .header-logos img:last-child { height: 100px; }
   .header-org { font-size: 12px; letter-spacing: 2px; }
   .promo-bubble-label { display: none; }
+  .update-log { padding: 0 16px; }
+  .update-log-panel { padding: 22px 20px; }
+  .update-item { grid-template-columns: 1fr; gap: 2px; }
 }
 </style>
 </head>
@@ -1096,6 +1154,51 @@ body {
     <div class="promo-modal-text">扫一扫上方二维码，或浏览下方群聊卡片找到你感兴趣的圈子。ACG 同好都在这里等你来玩～</div>
   </div>
 </div>
+
+<!-- Update Log -->
+<section class="update-log" aria-labelledby="updateLogTitle">
+  <div class="update-log-panel">
+    <h2 class="update-log-title" id="updateLogTitle">🌸 更新日志 🌸</h2>
+    <ol class="update-list">
+      <li class="update-item">
+        <time class="update-time" datetime="2026-09-07T15:40:00+08:00">2026-09-07 15:40</time>
+        <span class="update-text">新增页面更新日志，方便查看每次更新的时间与内容。</span>
+      </li>
+      <li class="update-item">
+        <time class="update-time" datetime="2026-09-07T13:59:00+08:00">2026-09-07 13:59</time>
+        <span class="update-text">新增「星语文学部」「某hku的动画目录」「更衣人偶坠入偶像」三个群聊。</span>
+      </li>
+      <li class="update-item">
+        <time class="update-time" datetime="2026-08-18T13:33:00+08:00">2026-08-18 13:33</time>
+        <span class="update-text">更新「港区OP指挥部」头图。</span>
+      </li>
+      <li class="update-item">
+        <time class="update-time" datetime="2026-08-17T11:28:00+08:00">2026-08-17 11:28</time>
+        <span class="update-text">为「龙门大学巴别塔分部」补充头图。</span>
+      </li>
+      <li class="update-item">
+        <time class="update-time" datetime="2026-08-16T23:32:00+08:00">2026-08-16 23:32</time>
+        <span class="update-text">补充并更新「龙门大学巴别塔分部」群名与二维码。</span>
+      </li>
+      <li class="update-item">
+        <time class="update-time" datetime="2026-08-16T16:57:00+08:00">2026-08-16 16:57</time>
+        <span class="update-text">更新多个群聊二维码、新增群聊，并改善手机端二维码弹窗。</span>
+      </li>
+      <li class="update-item">
+        <time class="update-time" datetime="2026-08-16T11:57:00+08:00">2026-08-16 11:57</time>
+        <span class="update-text">为「HKU BMUG」补充二维码与头图，并增加免责声明。</span>
+      </li>
+      <li class="update-item">
+        <time class="update-time" datetime="2026-08-12T21:01:00+08:00">2026-08-12 21:01</time>
+        <span class="update-text">完善社团标识、群聊二维码、头图与宣传海报。</span>
+      </li>
+      <li class="update-item">
+        <time class="update-time" datetime="2026-08-05T20:58:00+08:00">2026-08-05 20:58</time>
+        <span class="update-text">群聊推广页面首次上线。</span>
+      </li>
+    </ol>
+  </div>
+</section>
 
 <!-- Footer -->
 <footer class="page-footer">
